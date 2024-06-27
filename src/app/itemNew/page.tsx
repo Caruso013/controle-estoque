@@ -1,7 +1,9 @@
-// src/components/ItemNew.tsx
+// src/pages/itemNew.tsx
+"use client";
 
-import React, { useState } from 'react';
+import Header from '@/components/Header';
 import { useRouter } from 'next-router-mock';
+import { useState } from 'react';
 
 const ItemNew: React.FC = () => {
   const router = useRouter();
@@ -9,17 +11,28 @@ const ItemNew: React.FC = () => {
   const [itemName, setItemName] = useState('');
   const [itemQuantity, setItemQuantity] = useState(0);
   const [itemCategory, setItemCategory] = useState('');
+  const [itemPrice, setItemPrice] = useState('');
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // Aqui você pode adicionar a lógica para cadastrar o item no banco de dados
-    console.log(`Cadastrando o item: ${itemName}, quantidade: ${itemQuantity}, categoria: ${itemCategory}`);
-    // Exemplo de redirecionamento após o cadastro
-    router.push('/'); // Redireciona para a página inicial após o cadastro
+
+    // Logic to save the item to the database (replace with your implementation)
+    console.log(`Cadastrando o item: ${itemName}, quantidade: ${itemQuantity}, categoria: ${itemCategory}, preço: ${itemPrice}`);
+
+    try {
+      // Assuming successful item saving, navigate to the home page
+      await router.push('/'); // Use `router.push` for programmatic navigation
+    } catch (error) {
+      console.error('Error saving item:', error);
+      // Handle any errors during item saving and display a message to the user
+    }
   };
 
   return (
+    <div>
+      <Header />
     <div className="flex flex-col items-center justify-center h-screen">
+      <div className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
       <h1 className="text-4xl font-bold mb-8">Cadastro de Novo Item</h1>
       <form onSubmit={handleSubmit} className="flex flex-col items-center">
         <input
@@ -36,6 +49,16 @@ const ItemNew: React.FC = () => {
           onChange={(e) => setItemQuantity(Number(e.target.value))}
           className="border border-gray-400 rounded-md px-4 py-2 mb-4"
         />
+        <div className="flex items-center mb-4">
+          <span className="mr-2">$</span>
+          <input
+            type="text"
+            placeholder="Preço do Item"
+            value={itemPrice}
+            onChange={(e) => setItemPrice(e.target.value)}
+            className="border border-gray-400 rounded-md px-4 py-2"
+          />
+        </div>
         <select
           value={itemCategory}
           onChange={(e) => setItemCategory(e.target.value)}
@@ -51,6 +74,8 @@ const ItemNew: React.FC = () => {
           Cadastrar Item
         </button>
       </form>
+      </div>
+    </div>
     </div>
   );
 };
