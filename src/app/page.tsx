@@ -1,13 +1,10 @@
-// src/app/page.tsx
-
-'use client';
-
+// page.tsx
 import React, { useState } from 'react';
-import Header from '../components/Header';
-import Hero from '../components/Hero';
+import Header from '@/components/Header';
+import Hero from '@/components/Hero';
 
-const Home: React.FC = () => {
-  const [activeForm, setActiveForm] = useState<'entrada' | 'saida' | null>(null);
+const Page: React.FC = () => {
+  const [activeForm, setActiveForm] = useState<"entrada" | "saida" | null>(null); // Explicit typing
 
   const handleEntradaClick = () => {
     setActiveForm('entrada');
@@ -25,4 +22,4 @@ const Home: React.FC = () => {
   );
 };
 
-export default Home;
+export default Page;

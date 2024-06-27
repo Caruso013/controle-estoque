@@ -30,7 +30,11 @@ const ItemNew: React.FC = () => {
 
   return (
     <div>
-      <Header />
+      <Header onEntradaClick={function (): void {
+        throw new Error('Function not implemented.');
+      } } onSaidaClick={function (): void {
+        throw new Error('Function not implemented.');
+      } } />
     <div className="flex flex-col items-center justify-center h-screen">
       <div className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
       <h1 className="text-4xl font-bold mb-8">Cadastro de Novo Item</h1>

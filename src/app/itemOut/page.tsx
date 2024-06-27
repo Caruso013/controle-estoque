@@ -29,7 +29,11 @@ const ItemOut: React.FC = () => {
 
   return (
     <div>
-      <Header />
+      <Header onEntradaClick={function (): void {
+        throw new Error('Function not implemented.');
+      } } onSaidaClick={function (): void {
+        throw new Error('Function not implemented.');
+      } } />
     <div className="flex flex-col items-center justify-center h-screen">
       <h1 className="text-4xl font-bold mb-8">Saída de Item</h1>
       <form onSubmit={handleSubmit} className="flex flex-col items-center">
