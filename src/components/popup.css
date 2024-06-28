@@ -1,0 +1,32 @@
+/* src/components/Popup.css */
+
+.popup {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  background-color: #4CAF50;
+  color: white;
+  padding: 10px;
+  border-radius: 5px;
+  transition: opacity 0.3s ease;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.popup.show {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.popup-content {
+  display: flex;
+  align-items: center;
+}
+
+.popup-message {
+  margin-right: 10px;
+}
+
+.popup-icon {
+  font-size: 1.5rem;
+}

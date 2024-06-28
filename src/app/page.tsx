@@ -1,7 +1,11 @@
 // page.tsx
+"use client";
+
 import React, { useState } from 'react';
 import Header from '@/components/Header';
 import Hero from '@/components/Hero';
+import ItemList from '@/components/ItemList';
+import LoginPage from './login/page';
 
 const Page: React.FC = () => {
   const [activeForm, setActiveForm] = useState<"entrada" | "saida" | null>(null); // Explicit typing
@@ -18,6 +22,7 @@ const Page: React.FC = () => {
     <div>
       <Header onEntradaClick={handleEntradaClick} onSaidaClick={handleSaidaClick} />
       <Hero activeForm={activeForm} />
+      <ItemList />
     </div>
   );
 };
