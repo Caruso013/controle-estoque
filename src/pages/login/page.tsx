@@ -2,19 +2,22 @@
 
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import Cookies from 'js-cookie';
 
 const LoginPage: React.FC = () => {
+  const router = useRouter();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const router = useRouter();
+  const [error, setError] = useState('');
 
   const handleLogin = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
     if (username === 'PizariaADM' && password === 'Martins123') {
-      document.cookie = "auth=true; path=/";
+      Cookies.set('loggedIn', 'true');
       router.push('/');
     } else {
-      alert('Login or password is incorrect');
+      setError('Login ou senha incorretos.');
     }
   };
 
@@ -24,20 +27,21 @@ const LoginPage: React.FC = () => {
       <form onSubmit={handleLogin} className="flex flex-col items-center">
         <input
           type="text"
-          placeholder="Username"
+          placeholder="Usuário"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
           className="border border-gray-400 rounded-md px-4 py-2 mb-4"
         />
         <input
           type="password"
-          placeholder="Password"
+          placeholder="Senha"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           className="border border-gray-400 rounded-md px-4 py-2 mb-4"
         />
+        {error && <p className="text-red-500 mb-4">{error}</p>}
         <button type="submit" className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md">
-          Login
+          Entrar
         </button>
       </form>
     </div>

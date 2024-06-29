@@ -1,4 +1,4 @@
-// src/app/itemNew/page.tsx
+"use client";
 
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
@@ -11,7 +11,7 @@ const ItemNew: React.FC = () => {
   const [itemQuantity, setItemQuantity] = useState<number | undefined>(undefined);
   const [itemCategory, setItemCategory] = useState('');
   const [itemPrice, setItemPrice] = useState<number | undefined>(undefined);
-  const [showPopup, setShowPopup] = useState(false); // Estado para controlar a exibição do pop-up
+  const [showPopup, setShowPopup] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -26,21 +26,31 @@ const ItemNew: React.FC = () => {
       return;
     }
 
-    // Simulação de lógica para salvar o item no banco de dados
     console.log(`Cadastrando o item: ${itemName}, quantidade: ${itemQuantity}, categoria: ${itemCategory}, preço: ${itemPrice}`);
 
     try {
-      // Lógica para salvar o item no banco de dados (substitua com sua implementação real)
-      // Após salvar com sucesso, exibe o pop-up
-      setShowPopup(true);
+      const res = await fetch('/api/items', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: itemName,
+          quantity: itemQuantity,
+          category: itemCategory,
+          price: itemPrice,
+        }),
+      });
 
-      // Simula um tempo de espera antes de redirecionar para a página inicial
-      setTimeout(() => {
-        router.push('/'); // Use `router.push` para navegação programática
-      }, 3000); // Redireciona para a página inicial após 3 segundos
+      if (res.ok) {
+        setShowPopup(true);
+        setTimeout(() => setShowPopup(false), 3000);
+        router.push('/');
+      } else {
+        console.error('Error saving item:', res.statusText);
+      }
     } catch (error) {
-      console.error('Erro ao salvar o item:', error);
-      // Trate quaisquer erros durante o salvamento do item
+      console.error('Error saving item:', error);
     }
   };
 
@@ -89,9 +99,7 @@ const ItemNew: React.FC = () => {
           Cadastrar Item
         </button>
       </form>
-      {showPopup && (
-        <Popup message="Item cadastrado com sucesso" onClose={() => setShowPopup(false)} />
-      )}
+      {showPopup && <Popup message="Item cadastrado com sucesso" />}
     </div>
   );
 };
