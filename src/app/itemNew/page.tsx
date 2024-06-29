@@ -1,51 +1,42 @@
-// src/app/itemNew/page.tsx
+// src/pages/itemNew.tsx
+"use client";
 
-import React, { useState } from 'react';
-import { useRouter } from 'next/navigation';
-import Popup from '@/components/Popup'; // Importe o componente de pop-up
+import Header from '@/components/Header';
+import { useRouter } from 'next-router-mock';
+import { useState } from 'react';
 
 const ItemNew: React.FC = () => {
   const router = useRouter();
 
   const [itemName, setItemName] = useState('');
-  const [itemQuantity, setItemQuantity] = useState<number | undefined>(undefined);
+  const [itemQuantity, setItemQuantity] = useState(0);
   const [itemCategory, setItemCategory] = useState('');
-  const [itemPrice, setItemPrice] = useState<number | undefined>(undefined);
-  const [showPopup, setShowPopup] = useState(false); // Estado para controlar a exibição do pop-up
+  const [itemPrice, setItemPrice] = useState('');
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (itemQuantity && itemQuantity < 0) {
-      alert("A quantidade não pode ser negativa.");
-      return;
-    }
-
-    if (itemPrice && itemPrice < 0) {
-      alert("O preço não pode ser negativo.");
-      return;
-    }
-
-    // Simulação de lógica para salvar o item no banco de dados
+    // Logic to save the item to the database (replace with your implementation)
     console.log(`Cadastrando o item: ${itemName}, quantidade: ${itemQuantity}, categoria: ${itemCategory}, preço: ${itemPrice}`);
 
     try {
-      // Lógica para salvar o item no banco de dados (substitua com sua implementação real)
-      // Após salvar com sucesso, exibe o pop-up
-      setShowPopup(true);
-
-      // Simula um tempo de espera antes de redirecionar para a página inicial
-      setTimeout(() => {
-        router.push('/'); // Use `router.push` para navegação programática
-      }, 3000); // Redireciona para a página inicial após 3 segundos
+      // Assuming successful item saving, navigate to the home page
+      await router.push('/'); // Use `router.push` for programmatic navigation
     } catch (error) {
-      console.error('Erro ao salvar o item:', error);
-      // Trate quaisquer erros durante o salvamento do item
+      console.error('Error saving item:', error);
+      // Handle any errors during item saving and display a message to the user
     }
   };
 
   return (
+    <div>
+      <Header onEntradaClick={function (): void {
+        throw new Error('Function not implemented.');
+      } } onSaidaClick={function (): void {
+        throw new Error('Function not implemented.');
+      } } />
     <div className="flex flex-col items-center justify-center h-screen">
+      <div className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
       <h1 className="text-4xl font-bold mb-8">Cadastro de Novo Item</h1>
       <form onSubmit={handleSubmit} className="flex flex-col items-center">
         <input
@@ -59,19 +50,17 @@ const ItemNew: React.FC = () => {
           type="number"
           placeholder="Quantidade Inicial"
           value={itemQuantity}
-          onChange={(e) => setItemQuantity(e.target.valueAsNumber)}
+          onChange={(e) => setItemQuantity(Number(e.target.value))}
           className="border border-gray-400 rounded-md px-4 py-2 mb-4"
-          min="0"
         />
         <div className="flex items-center mb-4">
           <span className="mr-2">$</span>
           <input
-            type="number"
+            type="text"
             placeholder="Preço do Item"
             value={itemPrice}
-            onChange={(e) => setItemPrice(e.target.valueAsNumber)}
+            onChange={(e) => setItemPrice(e.target.value)}
             className="border border-gray-400 rounded-md px-4 py-2"
-            min="0"
           />
         </div>
         <select
@@ -89,9 +78,8 @@ const ItemNew: React.FC = () => {
           Cadastrar Item
         </button>
       </form>
-      {showPopup && (
-        <Popup message="Item cadastrado com sucesso" onClose={() => setShowPopup(false)} />
-      )}
+      </div>
+    </div>
     </div>
   );
 };
