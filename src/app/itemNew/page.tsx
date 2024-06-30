@@ -1,42 +1,51 @@
-// src/pages/itemNew.tsx
-"use client";
+import React, { useState } from 'react';
+import { useRouter } from 'next/router';
+import { cadastrarNovoItem } from '@/utils/api';
 
-import Header from '@/components/Header';
-import { useRouter } from 'next-router-mock';
-import { useState } from 'react';
+interface ItemNewProps {
+  onCadastro: () => void; // Função para atualizar a lista após cadastro
+}
 
-const ItemNew: React.FC = () => {
+const ItemNew: React.FC<ItemNewProps> = ({ onCadastro }) => {
   const router = useRouter();
 
   const [itemName, setItemName] = useState('');
   const [itemQuantity, setItemQuantity] = useState(0);
   const [itemCategory, setItemCategory] = useState('');
-  const [itemPrice, setItemPrice] = useState('');
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    // Logic to save the item to the database (replace with your implementation)
-    console.log(`Cadastrando o item: ${itemName}, quantidade: ${itemQuantity}, categoria: ${itemCategory}, preço: ${itemPrice}`);
+    // Lógica para validar os campos
+    if (!itemName.trim() || itemQuantity <= 0 || !itemCategory.trim()) {
+      alert('Por favor, preencha todos os campos.');
+      return;
+    }
+
+    // Objeto com os dados do novo item
+    const novoItem = {
+      name: itemName,
+      quantity: itemQuantity,
+      category: itemCategory,
+    };
 
     try {
-      // Assuming successful item saving, navigate to the home page
-      await router.push('/'); // Use `router.push` for programmatic navigation
+      // Chama a função para cadastrar o novo item
+      await cadastrarNovoItem(novoItem);
+      // Após cadastrar com sucesso, chama a função de callback para atualizar a lista de itens
+      onCadastro();
+      // Limpa os campos após o cadastro
+      setItemName('');
+      setItemQuantity(0);
+      setItemCategory('');
     } catch (error) {
-      console.error('Error saving item:', error);
-      // Handle any errors during item saving and display a message to the user
+      console.error('Erro ao cadastrar item:', error);
+      alert('Erro ao cadastrar item. Por favor, tente novamente.');
     }
   };
 
   return (
     <div>
-      <Header onEntradaClick={function (): void {
-        throw new Error('Function not implemented.');
-      } } onSaidaClick={function (): void {
-        throw new Error('Function not implemented.');
-      } } />
-    <div className="flex flex-col items-center justify-center h-screen">
-      <div className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
       <h1 className="text-4xl font-bold mb-8">Cadastro de Novo Item</h1>
       <form onSubmit={handleSubmit} className="flex flex-col items-center">
         <input
@@ -48,38 +57,26 @@ const ItemNew: React.FC = () => {
         />
         <input
           type="number"
-          placeholder="Quantidade Inicial"
+          placeholder="Quantidade"
           value={itemQuantity}
           onChange={(e) => setItemQuantity(Number(e.target.value))}
           className="border border-gray-400 rounded-md px-4 py-2 mb-4"
         />
-        <div className="flex items-center mb-4">
-          <span className="mr-2">$</span>
-          <input
-            type="text"
-            placeholder="Preço do Item"
-            value={itemPrice}
-            onChange={(e) => setItemPrice(e.target.value)}
-            className="border border-gray-400 rounded-md px-4 py-2"
-          />
-        </div>
         <select
           value={itemCategory}
           onChange={(e) => setItemCategory(e.target.value)}
           className="border border-gray-400 rounded-md px-4 py-2 mb-4"
         >
           <option value="">Selecione a Categoria</option>
-          <option value="ingredientes">Ingredientes</option>
-          <option value="bebidas">Bebidas</option>
-          <option value="embalagens">Embalagens</option>
-          <option value="outros">Outros</option>
+          <option value="Ingredientes">Ingredientes</option>
+          <option value="Bebidas">Bebidas</option>
+          <option value="Embalagens">Embalagens</option>
+          <option value="Outros">Outros</option>
         </select>
         <button type="submit" className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md">
-          Cadastrar Item
+          Cadastrar Novo Item
         </button>
       </form>
-      </div>
-    </div>
     </div>
   );
 };

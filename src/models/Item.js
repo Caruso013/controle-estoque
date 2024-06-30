@@ -1,5 +1,3 @@
-// models/Item.js
-
 const mongoose = require('mongoose');
 
 const ItemSchema = new mongoose.Schema({
